@@ -5,6 +5,36 @@ import { addDish } from "@/app/actions";
 import { Dish } from "@/types/dish";
 import { startTransition } from "react";
 
+    const INITIAL_DISH_STATE: Dish ={
+        name: "",
+        description: "",
+        prepTime:{
+            hourValue: 0,
+            minuteValue: 0
+        },
+        cookTime:{
+            hourValue: 0,
+            minuteValue: 0
+        },
+        servings: 0,
+        difficulty: "easy",
+        imageUrl: "",
+        instructions: [],
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        dietary: {
+            vegetarian: false,
+            vegan: false,
+            glutenFree: false,
+        },
+        categories: {
+            cuisine: "",
+            mealType: "",
+            cookingTime: "",
+        },
+        ingredients: []
+    }
+
 
 export default function CreateDish() {
     const [dish, setDish] = useState<Dish>({
@@ -37,6 +67,7 @@ export default function CreateDish() {
         ingredients: []
     });
 
+
     const [state, action, pending] = useActionState(addDish, null);
 
     const addInstruction = () => {
@@ -59,23 +90,37 @@ export default function CreateDish() {
         }));
     };
 
+    const handleTimeChange = (timeType: "prepTime" | "cookTime", field: "hourValue" | "minuteValue", value: number) => {
+        setDish(prev => ({
+            ...prev,
+            [timeType]: {
+                ...prev[timeType],
+                [field]: value
+            }
+        }));
+    }
+    
+   const resetForm = () => {
+    if (confirm("Are you sure you want to reset the form? All entered data will be lost.")) {
+        setDish(INITIAL_DISH_STATE);
+    }
+    };
+
     const handleChange = (field: keyof Dish, value: unknown) => {
         setDish(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+        const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         startTransition(() => {
-            action(dish);
+            action(dish)
         });
-    };
+        };
 
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-6">Create a New Dish</h1>
-            {state?.error && <div className="text-red-500 mb-4">{state.error}</div>}
-            {state?.success && <div className="text-green-500 mb-4">Dish created successfully!</div>}
-            
+         
             <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Basic Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -113,7 +158,7 @@ export default function CreateDish() {
                     <input
                         type="number"
                         value={dish.prepTime.hourValue}
-                        onChange={(e) => handleChange("prepTime", Number(e.target.value))}
+                        onChange={(e) => handleTimeChange("prepTime", "hourValue", Number(e.target.value))}
                         className="w-full p-2 border rounded"
                         min={0}
                     />
@@ -122,7 +167,7 @@ export default function CreateDish() {
                     <input
                         type="number"
                         value={dish.prepTime.minuteValue}
-                        onChange={(e) => handleChange("prepTime", Number(e.target.value))}
+                        onChange={(e) => handleTimeChange("prepTime", "minuteValue", Number(e.target.value))}
                         className="w-full p-2 border rounded"
                         min={0}
                     />
@@ -133,7 +178,7 @@ export default function CreateDish() {
                     <input
                         type="number"
                         value={dish.cookTime.hourValue}
-                        onChange={(e) => handleChange("cookTime", Number(e.target.value))}
+                        onChange={(e) => handleTimeChange("cookTime", "hourValue", Number(e.target.value))}
                         className="w-full p-2 border rounded"
                         min={0}
                     />
@@ -141,7 +186,7 @@ export default function CreateDish() {
                     <input
                         type="number"
                         value ={dish.cookTime.minuteValue}
-                        onChange={(e) => handleChange("cookTime", Number(e.target.value))}
+                        onChange={(e) => handleTimeChange("cookTime", "hourValue", Number(e.target.value))}
                         className="w-full p-2 border rounded"
                         min={0}
                     />
@@ -339,8 +384,17 @@ export default function CreateDish() {
                 >
                     {pending ? "Creating..." : "Create Dish"}
                 </button>
-                  {state?.success && <div className="text-green-500 mb-4">Dish created successfully!</div>}
-            
+
+                <button 
+                    type="button" 
+                    onClick={resetForm}
+                    className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+                >
+                    Reset Form
+                </button>
+                {state?.success && <div className="text-green-500 mb-4">Dish created successfully!</div>}
+                {state?.error && <div className="text-red-500 mb-4">{state.error}</div>}
+                 
             </form>
         </div>
     );

@@ -4,13 +4,13 @@ import { Dish } from '@/types/dish';
 import { ref, push, set } from 'firebase/database';
 import { database } from '@/lib/firebase';
 
-function cleanObject(obj: any): any {
+function cleanObject(obj: unknown): unknown {
   if (Array.isArray(obj)) return obj.map(cleanObject);
   if (obj !== null && typeof obj === 'object') {
-    const cleaned: any = {};
-    for (const key in obj) {
-      if (obj[key] !== undefined) {
-        cleaned[key] = cleanObject(obj[key]);
+    const cleaned: Record<string, unknown> = {};
+    for (const key in obj as Record<string, unknown>) {
+      if ((obj as Record<string, unknown>)[key] !== undefined) {
+        cleaned[key] = cleanObject((obj as Record<string, unknown>)[key]);
       }
     }
     return cleaned;
@@ -18,7 +18,7 @@ function cleanObject(obj: any): any {
   return obj;
 }
 
-export async function addDish(prevState: any, dish: Dish) {
+export async function addDish(prevState: unknown, dish: Dish) {
   try {
     if (!dish.name || !dish.description) {
       return { error: "Name and description are required", success: false };
