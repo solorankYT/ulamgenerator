@@ -16,3 +16,28 @@ export async function GET(request) {
     );
   }
 }
+
+export async function POST(request) {
+  const dish = await request.json();
+ 
+  const response = await fetch(
+    "https://ulamgen-default-rtdb.asia-southeast1.firebasedatabase.app/dishes.json",
+    {
+      method: "POST",
+      body: JSON.stringify(dish),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return NextResponse.json(
+      { error: "Failed to add dish" },
+      { status: 500 }
+    );
+  }
+
+  const data = await response.json();
+  return NextResponse.json({id: data.name, ...dish}, { status: 201 });
+}

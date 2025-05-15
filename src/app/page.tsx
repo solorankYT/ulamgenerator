@@ -11,6 +11,8 @@ const categoryOptions: CategoryType[] = [
       { value: "italian", label: "Italian" },
       { value: "mexican", label: "Mexican" },
       { value: "indian", label: "Indian" },
+      { value: "filipino", label: "Filipino" },
+      
     ],
   },
   {
@@ -21,7 +23,6 @@ const categoryOptions: CategoryType[] = [
       { value: "dinner", label: "Dinner" },
     ],
   },
-  // Add more categories as needed
 ];
 
 export default function CategoryPage() {
@@ -99,6 +100,26 @@ export default function CategoryPage() {
           <h2 className="text-xl font-bold">{randomDish.name}</h2>
           <p className="text-gray-600">{randomDish.description}</p>
           <div className="mt-4">
+            <h3 className="font-semibold mt-4">Cooking Time:</h3>
+            <p>
+              {randomDish.cookTime.hourValue > 0 && `${randomDish.cookTime.hourValue} hour`} 
+              {randomDish.cookTime.hourValue > 0 && randomDish.cookTime.minuteValue > 0 && ', '}
+              {randomDish.cookTime.minuteValue > 0 && `${randomDish.cookTime.minuteValue} minutes`}
+            </p>
+            <h3 className="font-semibold mt-4">Prep Time:</h3>
+  
+           <p>
+              {randomDish.prepTime.hourValue > 0 && `${randomDish.prepTime.hourValue} hour`} 
+              {randomDish.prepTime.hourValue > 0 && randomDish.prepTime.minuteValue > 0 && ', '}
+              {randomDish.prepTime.minuteValue > 0 && `${randomDish.prepTime.minuteValue} minutes`}
+            </p>
+
+            <h3 className="font-semibold mt-4">Servings:</h3>
+            <p>{randomDish.servings} servings</p>
+            <h3 className="font-semibold mt-4">Difficulty:</h3>
+            <p>{randomDish.difficulty.charAt(0).toUpperCase() + randomDish.difficulty.slice(1)}</p>
+
+            <br />
             <h3 className="font-semibold">Ingredients:</h3>
             <ul className="list-disc pl-5">
               {Object.values(randomDish.ingredients).map((ingredient, index) => (
@@ -107,6 +128,18 @@ export default function CategoryPage() {
                 </li>
               ))}
             </ul>
+
+            <h3 className="font-semibold mt-4">Instructions:</h3>
+              <ul className="pl-5">
+                {Object.values(randomDish.instructions).map((instruction, index)=>(
+                  <li key={index}>
+                   <h1 className="font-semibold">{instruction.number} - {instruction.title} </h1> 
+                 <p>{instruction.description}</p>
+                 <br/>
+                  </li>
+                ))}
+                </ul>
+
           </div>
         </div>
       )}
