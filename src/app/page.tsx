@@ -137,9 +137,14 @@ export default function CategoryPage() {
               <div className="md:flex-shrink-0 md:w-1/3 bg-gradient-to-br from-indigo-50 to-purple-50 p-6 flex items-center justify-center">
                 <div className="text-center">
                   <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center mb-4 shadow-inner">
-                    <svg className="w-16 h-16 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
+                    {randomDish.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={randomDish.imageUrl} alt={randomDish.name} className="w-full h-full object-cover rounded-full" />
+                    ) : (
+                      <svg className="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2m-4-8a2 2 0 100 4 2 2 0 000-4zM6.5 12.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm15-1.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                      </svg>
+                    )}
                   </div>
                   <h2 className="text-2xl font-bold text-gray-800">{randomDish.name}</h2>
                   <p className="text-gray-600 mt-2">{randomDish.description}</p>
